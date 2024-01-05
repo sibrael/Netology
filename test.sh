@@ -4,4 +4,4 @@ echo 'test' >  1.txt
 a
 b
 c
-Яблоко раздора
+Яблоко раздора_conflict
