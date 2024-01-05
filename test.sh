@@ -4,4 +4,4 @@ echo 'test' >  1.txt
 a
 b
 c
-Яблоко позора_main
+Яблоко раздора_conflict!
