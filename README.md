@@ -16,7 +16,6 @@
 
 Решение:
 ![Image alt](https://github.com/sibrael/Netology/blob/1041865779a4e9b5f627df477cf436264624a321/1.png)
-https://github.com/sibrael/Netology/blob/1041865779a4e9b5f627df477cf436264624a321/1.png
 
 ---
 
