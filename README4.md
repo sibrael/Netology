@@ -7,8 +7,6 @@
 1.3. Выполните запрос на получение списка пользователей в базе данных. (скриншот)
 ![Image alt](https://github.com/sibrael/Netology/blob/9097e7215f0ea4156625af950e7dc4c5b4746df4/MySQL1.png)
 
-https://github.com/sibrael/Netology/blob/9097e7215f0ea4156625af950e7dc4c5b4746df4/MySQL1.png
-
 1.4. Дайте все права для пользователя sys_temp.
 
 1.5. Выполните запрос на получение списка прав для пользователя sys_temp. (скриншот)
