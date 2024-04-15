@@ -57,9 +57,39 @@ join inventory i on i.inventory_id =r.inventory_id
 join film f on f.film_id = i.film_id   
 where date(p.payment_date) = '2005-07-30'  
 group by c.customer_id, f.title  
+order by concat(c.last_name, ' ', c.first_name)    
+
+
+
+V1.1  
+Film я оставил потому что для вывода важно разделение суммы по фильмам, если на выходо оно не нужно, то поле убрал.
+Индекс добавил. План запроса на картинке, аналайз ниже
+
+select concat(c.last_name, ' ', c.first_name) as FIO, sum(p.amount)   
+from payment p   
+join rental r on r.rental_id =p.rental_id   
+join customer c  on c.customer_id = r.customer_id   
+join inventory i on i.inventory_id =r.inventory_id  
+where p.payment_date >= '2005-07-30'    
+and p.payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)  
+group by c.customer_id  
 order by concat(c.last_name, ' ', c.first_name)  
 
+CREATE INDEX index_date ON payment (payment_date); 
+
+-> Sort: FIO  (actual time=2.69..2.7 rows=391 loops=1)  
+    -> Table scan on <temporary>  (actual time=2.55..2.58 rows=391 loops=1)  
+        -> Aggregate using temporary table  (actual time=2.55..2.55 rows=391 loops=1)  
+            -> Nested loop inner join  (cost=951 rows=634) (actual time=0.029..2.25 rows=634 loops=1)  
+                -> Nested loop inner join  (cost=729 rows=634) (actual time=0.0274..1.79 rows=634 loops=1)  
+                    -> Nested loop inner join  (cost=507 rows=634) (actual time=0.0246..1.29 rows=634 loops=1)  
+                        -> Filter: (p.rental_id is not null)  (cost=286 rows=634) (actual time=0.0189..0.753 rows=634 loops=1)  
+                            -> Index range scan on p using index_date over ('2005-07-30 00:00:00' <= payment_date < '2005-07-31 00:00:00'), with index condition: ((p.payment_date >= TIMESTAMP'2005-07-30 00:00:00') and (p.payment_date < <cache>(('2005-07-30' + interval 1 day))))  (cost=286 rows=634) (actual time=0.0181..0.717 rows=634 loops=1)  
+                        -> Single-row index lookup on r using PRIMARY (rental_id=p.rental_id)  (cost=0.25 rows=1) (actual time=727e-6..745e-6 rows=1 loops=634)  
+                    -> Single-row index lookup on c using PRIMARY (customer_id=r.customer_id)  (cost=0.25 rows=1) (actual time=677e-6..694e-6 rows=1 loops=634)  
+                -> Single-row covering index lookup on i using PRIMARY (inventory_id=r.inventory_id)  (cost=0.25 rows=1) (actual time=601e-6..621e-6 rows=1 loops=634)  
 
 
+![Image alt](https://github.com/sibrael/Netology/blob/88626364ed3700041a19409903b5e0984d590169/Index_2.png)
 
 ---
