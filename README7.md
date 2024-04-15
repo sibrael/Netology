@@ -3,9 +3,9 @@
 Напишите запрос к учебной базе данных, который вернёт процентное отношение общего размера всех индексов к общему размеру всех таблиц.
 количество пользователей, закреплённых в этом магазине.
 
-SELECT SUM(index_length * 1.0 / data_length) AS index_percentage
-FROM information_schema.tables
-WHERE table_schema = 'sakila'; 
+SELECT SUM(index_length * 1.0 / data_length) AS index_percentage  
+FROM information_schema.tables  
+WHERE table_schema = 'sakila';   
 
 
 ![Image alt](https://github.com/sibrael/Netology/blob/8902186b97258d9e2556f9cbbbeaacaae8447fbe/Index_1.png)
@@ -42,9 +42,12 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
                                 -> Covering index lookup on r using rental_date (rental_date=p.payment_date)  (cost=1 rows=1.01) (actual time=699e-6..0.00103 rows=1.01 loops=634000)  
                             -> Single-row index lookup on c using PRIMARY (customer_id=r.customer_id)  (cost=0.001 rows=1) (actual time=84.7e-6..101e-6 rows=1 loops=642000)  
                         -> Single-row covering index lookup on i using PRIMARY (inventory_id=r.inventory_id)  (cost=0.001 rows=1) (actual time=81e-6..97.1e-6 rows=1 loops=642000)  
-Избыточный и медленный селект.
-Зачем нам выбирать всю информацию из из всех таблиц и организовывать связи через обычные поля (p.payment_date = r.rental_date), когда можно сделать через join'ы и связаться через ключи?
-+ насколько я знаю, partition by работает чуть медленнее чем group by.
+                        
+Избыточный и медленный селект.  
+Зачем нам выбирать всю информацию из из всех таблиц и организовывать связи через обычные поля (p.payment_date = r.rental_date), когда можно сделать через join'ы и связаться через ключи?  
+Также, насколько я знаю, partition by работает чуть медленнее чем group by.  
+
+Моя версия данного запроса  
 
 select concat(c.last_name, ' ', c.first_name) as FIO, sum(p.amount)   
 from payment p   
